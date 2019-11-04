@@ -1,40 +1,41 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
 
+// =============== 计算器 ===============
+class App extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
 
-// ============ 高阶组件 =============
-const withUser = WapperComponent => {
-  const user = 'xxxxx';
-  return props => (<WapperComponent user={user}  {...props}/>);
+    this.handleSetCount = this.handleSetCount.bind(this);
+  }
+
+  handleSetCount (count) {
+    this.setState({ count });
+  }
+
+  render () {
+    const { count } = this.state;
+
+    return (
+      <div>
+        <div>{count}</div>
+        <Button
+          onClick={() => {
+            this.handleSetCount(count+1);
+          }}
+        >
+          点击
+        </Button>
+      </div>
+    )
+  }
 }
-const UserPage = props => {
-  return (
-    <div>
-      <p>My name is {props.user}!</p>
-    </div>
-  );
-}
-export default withUser(UserPage);
-// ============ 高阶组件 =============
 
-
-
-
-
-
-
-// class App extends Component {
-
-//   render () {
-//     return (
-//       <div>
-//         😄😄
-//       </div>
-//     )
-//   }
-// }
-
-// export default App;
+export default App;
+// =============== 计算器 ===============
 
 
 // ============ 改变标题 Class 版本 =============
@@ -80,3 +81,17 @@ export default withUser(UserPage);
 // ============ 改变标题 Class 版本 =============
 
 
+// ============ 高阶组件 =============
+// const withUser = WapperComponent => {
+//   const user = 'xxxxx';
+//   return props => (<WapperComponent user={user}  {...props}/>);
+// }
+// const UserPage = props => {
+//   return (
+//     <div>
+//       <p>My name is {props.user}!</p>
+//     </div>
+//   );
+// }
+// export default withUser(UserPage);
+// ============ 高阶组件 =============

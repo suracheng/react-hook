@@ -9,7 +9,8 @@
     "react-scripts": "0.9.x"
   },
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^2.2.0"
+    "eslint-plugin-react-hooks": "^2.2.0",
+    "lodash": "^4.17.15"
   },
   "scripts": {
     "start": "react-scripts start",

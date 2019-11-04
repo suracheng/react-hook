@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { isEqual } from 'lodash'
 import { Button } from 'antd';
 
 
-// =========== 计数器  useState ============== 
+// =========== useState ============== 
 // function App() {
 //   const [count, setCount] = useState(0);
 
@@ -12,10 +13,6 @@ import { Button } from 'antd';
 //       <Button
 //         onClick={() => {
 //           setCount(count + 1);
-//           // setCount((prevCount) => {
-//           //   console.log('返回先前的state----', prevCount);
-//           //   return prevCount + 1; // 计算得出新的state
-//           // });
 //         }}
 //       >
 //         点击
@@ -23,38 +20,99 @@ import { Button } from 'antd';
 //     </div>
 //   );
 // }
-// export default App;
-// =========== 计数器  useState ============== 
 
-// =========== 多个 useState ============= react 根据 useState 出现顺序决定 state 的状态值 
+
+// const someExpensiveComputation =  (props) => props;
+// function App() {
+//   const props = 0;
+//   const [count, setCount] = useState(() => {
+//     const initialState = someExpensiveComputation(props);
+//     return initialState;
+//   });
+
+//   return (
+//     <div>
+//       <div>{count}</div>
+//       <Button
+//         onClick={() => {
+//           setCount((prevCount) => {
+//             console.log('返回先前的state----', prevCount);
+//             return prevCount + 1; // 计算得出新的state
+//           });
+//         }}
+//       >
+//         点击
+//       </Button>
+//     </div>
+//   );
+// }
+
+// export default App;
+// =========== useState ============== 
+
+
+
+
+// =========== 多个 useState =============
 // function ExampleWithManyStates () {
-//   let showFruit = true;
 //   const [ age, setAge ] = useState(18);
-//   const [ fruit, setFruit ] = useState('banana');
-//   if (showFruit) {
-//     const [ fruit, setFruit ] = useState('banana');
-//     showFruit = false;
-//   }
+//   const [ fruit, setFruit ] = useState('apple');
 //   const [ todos, setTodos ] = useState([{ text: 'good good studay, day day up!' }]);
 
 //   return (
 //     <div>
-
+//       <p>{ age }</p>
+//       <p>{ fruit }</p>
+//       <p>
+//         {
+//           todos.map((item) => (item.text))
+//         }
+//       </p>
 //     </div>
 //   );
-
 // }
 // export default ExampleWithManyStates;
+
+/**
+react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多个 useState 状态值之间相互独立
+
+***** 第一次渲染 *****
+  useState(18)           //将 age 初始化为 18 
+  useEffect('apple')     //将 fruit 初始化为 apple
+  useState([{ text: 'good good studay, day day up!' }])  // 将 todos 初始化为数组
+
+
+***** 第二次渲染 *****
+  useState(18)           // 读取状态变量 age 的值
+  useEffect('apple')     // 读取状态变量 fruit 的值
+  useState([{ text: 'good good studay, day day up!' }])  // ...
+*/
 // ============ 多个 useState ============= 
 
 
 
 
-
-
-
-
 // ============= useEffect =================
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      // setCount(count + 1); // 依赖于 `count` state
+      setCount(c => c + 1);   // 不依赖于外部的 `count` 变量
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (<h1>{count}</h1>);
+}
+
+export default Counter;
+
+
+
+
 // function Example ({ test }) {
 //   const [ count, setCount ] = useState(18);
 //   let timer = null;
@@ -97,33 +155,30 @@ import { Button } from 'antd';
 // }
 
 // export default Test;
-
-
-
-
-
-function Counter() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      // setCount(count + 1); // 这个 effect 依赖于 `count` state
-      setCount(c => c + 1);   // ✅ 在这不依赖于外部的 `count` 变量
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  return <h1>{count}</h1>;
-}
-
-export default Counter;
 // ============= useEffect =================
 
 
 
 
 
+// function ExampleWithManyStates () {
+//   let showFruit = true;
+//   const [ age, setAge ] = useState(18);
+//   const [ fruit, setFruit ] = useState('banana');
 
+//   if (showFruit) {
+//     const [ fruit, setFruit ] = useState('banana');
+//     showFruit = false;
+//   }
+//   const [ todos, setTodos ] = useState([{ text: 'good good studay, day day up!' }]);
+
+//   return (
+//     <div>
+
+//     </div>
+//   );
+
+// }
 
 
 
@@ -175,16 +230,18 @@ export default Counter;
 // ========== 条件 hook 导致的bug ======= 
 
 
+
+
 // function someExpensiveComputation (props) {
 //   return props;
 // }
 
 // function App() {
 //   const props = 0;
-//   const [count, setCount] = useState(() => {
-//     const initialState = someExpensiveComputation(props);
-//     return initialState;
-//   });
+  // const [count, setCount] = useState(() => {
+  //   const initialState = someExpensiveComputation(props);
+  //   return initialState;
+  // });
 
 //   return (
 //     <div>
@@ -226,3 +283,31 @@ export default Counter;
 // }
 // export default Counter;
 
+
+
+// ================ 自定义 hook ================
+// function useWindowWidth () {
+//   const [ width, setWidth ] = useState(window.innerWidth);
+
+//   useEffect(() => {
+//     const handleResize = () => setWidth(window.innerWidth);
+//     window.addEventListener('resize', handleResize);
+
+//     return () => {
+//       window.removeEventListener('resize', handleResize);
+//     }
+//   });
+
+//   return width;
+// }
+
+// function myComponent () {
+//   const width = useWindowWidth();
+
+//   return (
+//     <p>窗口宽度： {width}</p>
+//   )
+// }
+
+// export default myComponent;
+// ================ 自定义 hook ================
