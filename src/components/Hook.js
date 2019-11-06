@@ -19,7 +19,8 @@ import { Button } from 'antd';
 //       </Button>
 //     </div>
 //   );
-// }
+// };
+// export default App;
 
 
 // const someExpensiveComputation =  (props) => props;
@@ -46,7 +47,6 @@ import { Button } from 'antd';
 //     </div>
 //   );
 // }
-
 // export default App;
 // =========== useState ============== 
 
@@ -55,9 +55,16 @@ import { Button } from 'antd';
 
 // =========== 多个 useState =============
 // function ExampleWithManyStates () {
+//   // 更新数据时操作不方便， state 是替换的方式更新 state
+//   // const [] = useState({
+//   //   age: 18,
+//   //   fruit: 'apple',
+//   //   todos: [{ text: 'good good studay, day day up!' }]
+//   // });
 //   const [ age, setAge ] = useState(18);
 //   const [ fruit, setFruit ] = useState('apple');
 //   const [ todos, setTodos ] = useState([{ text: 'good good studay, day day up!' }]);
+
 
 //   return (
 //     <div>
@@ -77,14 +84,14 @@ import { Button } from 'antd';
 react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多个 useState 状态值之间相互独立
 
 ***** 第一次渲染 *****
-  useState(18)           //将 age 初始化为 18 
-  useEffect('apple')     //将 fruit 初始化为 apple
+  useState(18)           // 将 age 初始化为 18 
+  useEffect('apple')     // 将 fruit 初始化为 apple
   useState([{ text: 'good good studay, day day up!' }])  // 将 todos 初始化为数组
 
 
 ***** 第二次渲染 *****
-  useState(18)           // 读取状态变量 age 的值
-  useEffect('apple')     // 读取状态变量 fruit 的值
+  useState(18)           // 读取状态变量 age 的最新的值
+  useEffect('apple')     // 读取状态变量 fruit 的最新的值
   useState([{ text: 'good good studay, day day up!' }])  // ...
 */
 // ============ 多个 useState ============= 
@@ -92,97 +99,57 @@ react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多
 
 
 
+
 // ============= useEffect =================
 
-function Counter() {
-  const [count, setCount] = useState(0);
+function Example () {
+  const [ count, setCount ] = useState(0);
+
+  // componentDidMount / componentDidUpdate / componentWillUnmount
+  useEffect(() => {
+    document.title = `click ${count} timers`;
+    console.log('count---', count);
+
+    return () => {
+      // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
+      console.log('===== clean up! ======', count);
+    }
+  }, [count]); // 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
+  // 如果设置了依赖项，effect中用到的所有组件内的值都要包含在依赖中
+
+
+  const [ age, setAge ] = useState(18);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      // setCount(count + 1); // 依赖于 `count` state
-      setCount(c => c + 1);   // 不依赖于外部的 `count` 变量
+    const timer = window.setInterval(() => {
+      setCount(age + 1); // 依赖于 `age` state 传入 count 时 ，每次更新都会清除 设置定时器
+      // setAge(prevAge => prevAge + 1);   // 不依赖于外部的 `age` 变量
     }, 1000);
-    return () => clearInterval(id);
+    return () => window.clearInterval(timer);
   }, []);
 
-  return (<h1>{count}</h1>);
+
+  return (
+    <div>
+      <div>count: {count}</div>
+      <h1>age: {age}</h1>
+      <Button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        点击
+      </Button>
+    </div>
+  );
 }
+export default Example;
 
-export default Counter;
-
-
-
-
-// function Example ({ test }) {
-//   const [ count, setCount ] = useState(18);
-//   let timer = null;
-
-//   // componentDidMount  componentDidUpdate  componentWillUnmount
-//   useEffect(() => {
-//     // console.log('count---', count);
-//     // timer = window.setInterval(() => {
-//     //   console.log('lalalala', timer);
-//     // }, 1000);
-
-//     document.title = `click ${count} ${test} timers`;
-
-//     return () => {
-//       // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
-//       console.log('查看清除运行的次数------', count);
-//       // console.log('timer====', timer);
-//       // window.clearInterval(timer);
-//     }
-//   }, [count]); 
-//   // 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
-
-//   return (
-//     <div>
-//       <div>{count}</div>
-//       <Button
-//         onClick={() => {
-//           setCount(count + 1);
-//         }}
-//       >
-//         点击
-//       </Button>
-//     </div>
-//   );
-// }
-
-// function Test () {
-//   const props = { test: '测试！' };
-//   return Example(props);
-// }
-
-// export default Test;
 // ============= useEffect =================
 
 
 
-
-
-// function ExampleWithManyStates () {
-//   let showFruit = true;
-//   const [ age, setAge ] = useState(18);
-//   const [ fruit, setFruit ] = useState('banana');
-
-//   if (showFruit) {
-//     const [ fruit, setFruit ] = useState('banana');
-//     showFruit = false;
-//   }
-//   const [ todos, setTodos ] = useState([{ text: 'good good studay, day day up!' }]);
-
-//   return (
-//     <div>
-
-//     </div>
-//   );
-
-// }
-
-
-
-// ========= 条件 hook ======= 
+// ========= 条件 hook 导致的bug ======= 
 // function Form() {
 //   const [name, setName] = useState('Mary');
 
@@ -192,15 +159,13 @@ export default Counter;
 //     });
 //   }
 
-//   // useEffect(function persistForm() {
-//   //   localStorage.setItem('formData', name);
-//   // });
-
 //   const [surname, setSurname] = useState('Poppins');
 
 //   useEffect(function updateTitle() {
 //     document.title = name + ' ' + surname;
 //   });
+
+//   // .....
 // }
 // export default Form;
 
@@ -227,6 +192,8 @@ export default Counter;
 // useEffect(persistForm)     // 🔴 此 Hook 被忽略！
 // useState('Poppins')        // 🔴 2 （之前为 3）。读取变量名为 surname 的 state 失败
 // useEffect(updateTitle)     // 🔴 3 （之前为 4）。替换更新标题的 effect 失败
+
+// 可以将条件放置在 useEffect 中
 // ========== 条件 hook 导致的bug ======= 
 
 

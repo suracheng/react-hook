@@ -79,22 +79,3 @@ export default App;
 
 // export default Example;
 // ============ 改变标题 Class 版本 =============
-
-
-
-
-
-// ============ 高阶组件 =============
-// const withUser = WapperComponent => {
-//   const user = 'xxxxx';
-//   return props => (<WapperComponent user={user}  {...props}/>);
-// }
-// const UserPage = props => {
-//   return (
-//     <div>
-//       <p>My name is {props.user}!</p>
-//     </div>
-//   );
-// }
-// export default withUser(UserPage);
-// ============ 高阶组件 =============

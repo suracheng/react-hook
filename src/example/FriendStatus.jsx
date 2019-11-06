@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+// 显示朋友列表中的该用户是否在线
 class FriendStatus extends Component {
   constructor(props) {
     super(props);
