@@ -1,14 +1,13 @@
 # React Hook 入门
 
 ## 什么是 Hook
-Hook 是 **react 16.8.0** 及以上版本新增的功能, 能让你在函数组件中 “钩入” React 特性的函数，名字通常都以 use 开始,
+Hook 是 **react 16.8.0** 及以上版本新增的功能, 能让你在函数组件中 “钩入” React 特性，名字通常都以 use 开始;
 Hook的出现使你在非 class 的情况下可以使用更多的 React 特性。
 
 
 ## 为什么会有 Hook, 我们为什么要使用它
 
 #### 在 hook 发布之前， 我们通常使用 function 函数编写 无状态组件， 当需要往组件中添加 state 状态时， 需要将组件改写为 class 形式 （hook 出现后可以直接使用 function 函数编写有状态组件）
-
 
 
 
@@ -19,10 +18,6 @@ Hook的出现使你在非 class 的情况下可以使用更多的 React 特性�
 
 #### 生命周期函数中的逻辑太乱， 使复杂组件变得难以理解  
 > 原因：某个组件中我们可能会在 componentDidMount 函数中 获取 ajax 数据， 同时还会订阅事件，设置监听等， 在 componentWillUnmount 中清除定时器， 取消事件监听等， 相互关联且需要对照修改的代码被进行了拆分，而完全不相关的代码却在同一个方法中组合在一起。当组件变得复杂后，很容易产生 bug， 导致逻辑不一致， 不利于维护
-
-
-可以使用 hook 从组件中提取状态逻辑， 使得这些逻辑可以单独测试并复用。
-（把想要实现的功能拆分成一个个自定义的 hook, 直接在组件中调用 hook 即可。  可以无需修改组件结构的情况下复用状态逻辑。 这使得在组件间或社区内共享 Hook 变得更便捷。）
 
 
 #### this 指向问题
@@ -63,13 +58,6 @@ Hook的出现使你在非 class 的情况下可以使用更多的 React 特性�
 
 
 
-###### 在一个组件中多次调用 useState 和 useEffect ， 如何判断对应的状态呢？
-
-  React 靠的是 hook 调用的顺序， hook 的调用顺序在每次的渲染中都是相同， 能保证 hook 状态的准确性
-  如果在判断条件等中使用 hook ， 当条件不成立时， 该 hook 不执行， 后面的 hook 调用都被提前执行， 导致 bug 产生； 如果我们想有条件的执行一个 hook 可以将判断条件放在 hook 内部。
-
-
-
 ### useState
 - useState 方法接受唯一一个参数（字符串 数字 布尔 数组 对象）作为 state 的初始值， 返回一个包含两项元素的数组。
 
@@ -85,9 +73,9 @@ const [ something, setSomething ] = useState(() => {
 });
 ```
 
-- 返回的 setSomething 为一个函数， 类似 this.setState, 用来更改 state 状态值， 但更新状态时，不像 this.setState 一样合并 state ， 而是直接替换旧的 state， 返回新的 state
-
 - setSomething 函数接受 值 或 函数两种类型的参数
+
+- 返回的 setSomething 为一个函数， 类似 this.setState, 用来更改 state 状态值， 但更新状态时，不像 this.setState 一样合并 state ， 而是直接替换旧的 state， 返回新的 state
 
 - 支持多个 useState 调用
 
@@ -101,14 +89,14 @@ const [ something, setSomething ] = useState(() => {
 
 - 可以看作是 componentDidMount，componentDidUpdate 和 componentWillUnmount 这三个函数的组合
 
+- useEffect与类组件生命周期不同的是，componentDidUpdate和componentDidMount 都是在 DOM 更新后同步执行的, 但 useEffect 并不会在 DOM 更新后同步执行，也不会阻塞更新界面（异步执行）。
+
 ```
 渲染时执行顺序：
 render -> effect callback -> re-render -> clean callback -> effect callback
 ```
 
 - 可以创建多个 hook, 将相关逻辑代码放在同一个 hook 中， 使代码逻辑清晰
-
-- useEffect与类组件生命周期不同的是，componentDidUpdate和componentDidMount 都是在 DOM 更新后同步执行的, 但 useEffect 并不会在 DOM 更新后同步执行，也不会阻塞更新界面（异步执行）。
 
 
 

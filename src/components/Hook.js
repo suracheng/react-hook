@@ -4,23 +4,23 @@ import { Button } from 'antd';
 
 
 // =========== useState ============== 
-function App() {
-  const [count, setCount] = useState(0);
+// function App() {
+//   const [count, setCount] = useState(0);
 
-  return (
-    <div>
-      <div>{count}</div>
-      <Button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        点击
-      </Button>
-    </div>
-  );
-};
-export default App;
+//   return (
+//     <div>
+//       <div>{count}</div>
+//       <Button
+//         onClick={() => {
+//           setCount(count + 1);
+//         }}
+//       >
+//         点击
+//       </Button>
+//     </div>
+//   );
+// };
+// export default App;
 
 
 // const someExpensiveComputation =  (props) => props;
@@ -102,49 +102,49 @@ export default App;
 
 // ============= useEffect =================
 
-// function Example () {
-//   const [ count, setCount ] = useState(0);
+function Example () {
+  const [ count, setCount ] = useState(0);
 
-//   // componentDidMount / componentDidUpdate / componentWillUnmount
-//   useEffect(() => {
-//     document.title = `click ${count} timers`;
-//     console.log('count---', count);
+  // componentDidMount / componentDidUpdate / componentWillUnmount
+  useEffect(() => {
+    document.title = `click ${count} timers`;
+    console.log('count---', count);
 
-//     return () => {
-//       // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
-//       console.log('===== clean up! ======', count);
-//     }
-//   }, [count]); // 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
-//   // 如果设置了依赖项，effect中用到的所有组件内的值都要包含在依赖中
-
-
-//   const [ age, setAge ] = useState(18);
-
-//   useEffect(() => {
-//     const timer = window.setInterval(() => {
-//       setCount(age + 1); // 依赖于 `age` state 传入 count 时 ，每次更新都会清除 设置定时器
-//       // setAge(prevAge => prevAge + 1);   // 不依赖于外部的 `age` 变量
-//     }, 1000);
-//     return () => window.clearInterval(timer);
-//   }, []);
+    return () => {
+      // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
+      console.log('===== clean up! ======', count);
+    }
+  }); //  [count] 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
+  // 如果设置了依赖项，effect中用到的所有组件内的值都要包含在依赖中
 
 
-//   return (
-//     <div>
-//       <div>count: {count}</div>
-//       <h1>age: {age}</h1>
-//       <Button
-//         onClick={() => {
-//           setCount(count + 1);
-//         }}
-//       >
-//         点击
-//       </Button>
-//     </div>
-//   );
-// }
+  const [ age, setAge ] = useState(18);
 
-// export default Example;
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setAge(age + 1); // 依赖于 `age` state 传入 count 时 ，每次更新都会清除 设置定时器
+      // setAge(prevAge => prevAge + 1);   // 不依赖于外部的 `age` 变量
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+
+  return (
+    <div>
+      <div>count: {count}</div>
+      <h1>age: {age}</h1>
+      <Button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        点击
+      </Button>
+    </div>
+  );
+}
+
+export default Example;
 
 // ============= useEffect =================
 
@@ -172,13 +172,6 @@ export default App;
 
 
 
-/**
-
-问题： 在一个组件中多次调用 useState 和 useEffect，如何判断对应的状态呢？
-
-  React 靠的是 hook 调用的顺序， hook 的调用顺序在每次的渲染中都是相同， 能保证 hook 状态的准确性
-  如果在判断条件等中使用 hook ， 当条件不成立时， 该 hook 不执行， 后面的 hook 调用都被提前执行， 导致 bug 产生； 如果我们想有条件的执行一个 hook 可以将判断条件放在 hook 内部。
-*/
 // ------------
 // 首次渲染
 // ------------
@@ -202,7 +195,17 @@ export default App;
 // useState('Poppins')        // 🔴 2 （之前为 3）。读取变量名为 surname 的 state 失败
 // useEffect(updateTitle)     // 🔴 3 （之前为 4）。替换更新标题的 effect 失败
 
-// 可以将条件放置在 useEffect 中
+
+/**
+
+问题： 在一个组件中多次调用 useState 和 useEffect，如何判断对应的状态呢？
+
+  React 靠的是 hook 调用的顺序， hook 的调用顺序在每次的渲染中都是相同， 能保证 hook 状态的准确性
+  如果在判断条件等中使用 hook ， 当条件不成立时， 该 hook 不执行， 后面的 hook 调用都被提前执行， 导致 bug 产生； 如果我们想有条件的执行一个 hook 可以将判断条件放在 hook 内部。
+
+  可将条件放置在 useEffect 中
+*/
+
 // ========== 条件 hook 导致的bug ======= 
 
 
