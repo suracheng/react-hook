@@ -119,44 +119,34 @@ render -> effect callback -> re-render -> clean callback -> effect callback
 - useEffect与类组件生命周期不同的是，componentDidUpdate和componentDidMount 都是在 DOM 更新后同步执行的, 但 useEffect 并不会在 DOM 更新后同步执行，也不会阻塞更新界面（异步执行）。
 
 
-```
-
-该函数在第一次渲染之后 和 每次更新之后都会执行， React 保证了每次运行 effect 的同时，DOM 都已经更新完毕 (在组件渲染之后执行)
-
-useEffect 传入的函数中 可以返回一个函数 (可以是箭头函数或者为函数起个别名) 用于取消或清楚一些操作 
-
-在调用新的 effect 之前对前一个 effect 进行清理
-
-
-```
-
 
 
 
 
 ### useContext
-```
-useContext(MyContext) 只是让你能够读取 context 的值以及订阅 context 的变化。你仍然需要在上层组件树中使用 <MyContext.Provider> 来为下层组件提供 context。
-```
+- useContext 接受函数 React.createContext 返回的 context 对象作为参数，返回当前 context 中值
+
+- useContext(MyContext) 只是让你能够读取 context 的值以及订阅 context 的变化。你仍然需要在上层组件树中使用 <MyContext.Provider> 来为下层组件提供 context。
 
 
 
 
 ## 自定义 hook
-> 通过自定义 hook， 可以将组件逻辑提取到可重用的函数中, 自定义 Hooks 从技术上讲并不是 React 的特性。编写自定义 Hooks 的可行性源自于 Hooks 的设计方式
+- 自定义 Hook 是一个函数， 函数名以 “use” 开头 （约定）， 在函数内部可调用其它 hook。
 
-1. 自定义 Hook 是一个函数， 函数名以 “use” 开头， 在函数内部可调用其它 hook
-  （以 “use” 开头, 是一个约定， 不遵循的话，由于无法判断某个函数是否包含对其内部 Hook 的调用，React 将无法自动检查你的 Hook 是否违反了 Hook 的规则。）
+- 可以在内部调用其他 hook
 
-2. 多个组件使用相同的 hook 不会共享 state 状态， 自定义 Hook 是一种重用状态逻辑的机制，所以每次使用自定义 Hook 时，其中的所有 state 和副作用都是完全隔离的。  （重用状态逻辑的机制 是什么 ？？）
+- 多个组件使用相同的 hook 不会共享 state 状态， 自定义 Hook 是一种重用状态逻辑的机制，所以每次使用自定义 Hook 时，其中的所有 state 和副作用都是完全隔离的。
+
+> 通过自定义 hook， 可以将组件逻辑提取到可重用的函数中
 
 
 
-```
-文章参考
-https://segmentfault.com/a/1190000019223106?utm_source=tag-newest
-https://blog.csdn.net/liuyingv8/article/details/84068075
-https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/
 
-https://blog.csdn.net/sinat_17775997/article/details/88082945
-```
+
+
+###### 文章参考
+[文章1](https://segmentfault.com/a/1190000019223106?utm_source=tag-newest)
+[文章2](https://blog.csdn.net/liuyingv8/article/details/84068075)
+[文章3](https://blog.csdn.net/sinat_17775997/article/details/88082945)
+[文章4](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)

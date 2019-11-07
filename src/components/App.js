@@ -1,40 +1,40 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { Button } from 'antd';
 
 // =============== 计算器 ===============
-class App extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      count: 0,
-    };
+// class App extends Component {
+//   constructor (props) {
+//     super(props);
+//     this.state = {
+//       count: 0,
+//     };
 
-    this.handleSetCount = this.handleSetCount.bind(this);
-  }
+//     this.handleSetCount = this.handleSetCount.bind(this);
+//   }
 
-  handleSetCount (count) {
-    this.setState({ count });
-  }
+//   handleSetCount (count) {
+//     this.setState({ count });
+//   }
 
-  render () {
-    const { count } = this.state;
+//   render () {
+//     const { count } = this.state;
 
-    return (
-      <div>
-        <div>{count}</div>
-        <Button
-          onClick={() => {
-            this.handleSetCount(count+1);
-          }}
-        >
-          点击
-        </Button>
-      </div>
-    )
-  }
-}
+//     return (
+//       <div>
+//         <div>{count}</div>
+//         <Button
+//           onClick={() => {
+//             this.handleSetCount(count+1);
+//           }}
+//         >
+//           点击
+//         </Button>
+//       </div>
+//     )
+//   }
+// }
 
-export default App;
+// export default App;
 // =============== 计算器 ===============
 
 
@@ -79,3 +79,52 @@ export default App;
 
 // export default Example;
 // ============ 改变标题 Class 版本 =============
+
+
+
+const { Consumer, Provider } = React.createContext({
+  color: 'red',
+});
+
+class App extends Component {
+  constructor () {
+    super();
+    this.state = {
+      color: 'red'
+    }
+  }
+
+  handleClick = (newColor) => {
+    this.setState({ color: newColor })
+  }
+
+  render () {
+      return (
+        <Provider value={{ s: this.state, h: this.handleClick }}>
+          <Head></Head>
+        </Provider>
+      )
+  }
+}
+
+
+class Head extends Component {
+  render () {
+    return (<Title></Title>)
+  }
+}
+
+class Title extends Component {
+
+  render () {
+    return (
+      <Consumer>
+        { ({s, h}) => {
+            console.log(s, h)
+            return <div style={s} onClick={ () => h('pink') }>hello</div>
+          }
+        }
+      </Consumer>
+    )
+  }
+}

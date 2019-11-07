@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useContext, Component } from 'react';
 import { isEqual } from 'lodash'
 import { Button } from 'antd';
 
@@ -102,48 +102,49 @@ react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多
 
 // ============= useEffect =================
 
-function Example () {
-  const [ count, setCount ] = useState(0);
+// function Example () {
+//   const [ count, setCount ] = useState(0);
 
-  // componentDidMount / componentDidUpdate / componentWillUnmount
-  useEffect(() => {
-    document.title = `click ${count} timers`;
-    console.log('count---', count);
+//   // componentDidMount / componentDidUpdate / componentWillUnmount
+//   useEffect(() => {
+//     document.title = `click ${count} timers`;
+//     console.log('count---', count);
 
-    return () => {
-      // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
-      console.log('===== clean up! ======', count);
-    }
-  }, [count]); // 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
-  // 如果设置了依赖项，effect中用到的所有组件内的值都要包含在依赖中
-
-
-  const [ age, setAge ] = useState(18);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCount(age + 1); // 依赖于 `age` state 传入 count 时 ，每次更新都会清除 设置定时器
-      // setAge(prevAge => prevAge + 1);   // 不依赖于外部的 `age` 变量
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, []);
+//     return () => {
+//       // 每次更新时会先执行上一次return的清除操作， 然后在更新组件
+//       console.log('===== clean up! ======', count);
+//     }
+//   }, [count]); // 第二个参数用来告诉 react 只有当 count 值发生改变时才会执行 useEffect 中的函数
+//   // 如果设置了依赖项，effect中用到的所有组件内的值都要包含在依赖中
 
 
-  return (
-    <div>
-      <div>count: {count}</div>
-      <h1>age: {age}</h1>
-      <Button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        点击
-      </Button>
-    </div>
-  );
-}
-export default Example;
+//   const [ age, setAge ] = useState(18);
+
+//   useEffect(() => {
+//     const timer = window.setInterval(() => {
+//       setCount(age + 1); // 依赖于 `age` state 传入 count 时 ，每次更新都会清除 设置定时器
+//       // setAge(prevAge => prevAge + 1);   // 不依赖于外部的 `age` 变量
+//     }, 1000);
+//     return () => window.clearInterval(timer);
+//   }, []);
+
+
+//   return (
+//     <div>
+//       <div>count: {count}</div>
+//       <h1>age: {age}</h1>
+//       <Button
+//         onClick={() => {
+//           setCount(count + 1);
+//         }}
+//       >
+//         点击
+//       </Button>
+//     </div>
+//   );
+// }
+
+// export default Example;
 
 // ============= useEffect =================
 
@@ -198,32 +199,74 @@ export default Example;
 
 
 
+// ========== useContext ===========
 
-// function someExpensiveComputation (props) {
-//   return props;
-// }
-
-// function App() {
-//   const props = 0;
-  // const [count, setCount] = useState(() => {
-  //   const initialState = someExpensiveComputation(props);
-  //   return initialState;
-  // });
+// const context = React.createContext();
+ 
+// function Example() {
+//   const theme = useContext(context);
+  
+//   console.log('theme------', theme);
 
 //   return (
-//     <div>
-//       <div>{count}</div>
-//       <Button
-//         onClick={() => {
-//           setCount(count + 1);
-//         }}
-//       >
-//         点击
-//       </Button>
-//     </div>
+//     <p style={{color: theme.color}}>Hello World!</p>
 //   );
 // }
-// export default App;
+
+// class Test extends Component {
+//   state = {
+//     color: "red",
+//     background: "black"
+//   };
+ 
+//   render() {
+//     return (
+//         <context.Provider value={{ ...this.state }}>
+//           <Example/>
+//           <button onClick={() => this.setState({color: 'blue'})}>color</button>
+//           <button onClick={() => this.setState({background: 'blue'})}>backgroud</button>
+//         </context.Provider>
+//     );
+//   }
+// }
+
+// export default Test;
+
+// ========== useContext ===========
+
+
+
+
+// ================ 自定义 hook ================
+function useWindowWidth () {
+  const [ width, setWidth ] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  });
+
+  return width;
+}
+
+function myComponent () {
+  const width = useWindowWidth();
+
+  return (
+    <p>窗口宽度： {width}</p>
+  )
+}
+
+export default myComponent;
+// ================ 自定义 hook ================
+
+
+
+
 
 
 
@@ -249,32 +292,3 @@ export default Example;
 //   return ref.current;
 // }
 // export default Counter;
-
-
-
-// ================ 自定义 hook ================
-// function useWindowWidth () {
-//   const [ width, setWidth ] = useState(window.innerWidth);
-
-//   useEffect(() => {
-//     const handleResize = () => setWidth(window.innerWidth);
-//     window.addEventListener('resize', handleResize);
-
-//     return () => {
-//       window.removeEventListener('resize', handleResize);
-//     }
-//   });
-
-//   return width;
-// }
-
-// function myComponent () {
-//   const width = useWindowWidth();
-
-//   return (
-//     <p>窗口宽度： {width}</p>
-//   )
-// }
-
-// export default myComponent;
-// ================ 自定义 hook ================
