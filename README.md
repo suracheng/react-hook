@@ -133,12 +133,3 @@ render -> effect callback -> re-render -> clean callback -> effect callback
 > 通过自定义 hook， 可以将组件逻辑提取到可重用的函数中
 
 
-
-
-
-
-###### 文章参考
-[文章1](https://segmentfault.com/a/1190000019223106?utm_source=tag-newest)
-[文章2](https://blog.csdn.net/liuyingv8/article/details/84068075)
-[文章3](https://blog.csdn.net/sinat_17775997/article/details/88082945)
-[文章4](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)

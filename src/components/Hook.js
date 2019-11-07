@@ -4,23 +4,23 @@ import { Button } from 'antd';
 
 
 // =========== useState ============== 
-// function App() {
-//   const [count, setCount] = useState(0);
+function App() {
+  const [count, setCount] = useState(0);
 
-//   return (
-//     <div>
-//       <div>{count}</div>
-//       <Button
-//         onClick={() => {
-//           setCount(count + 1);
-//         }}
-//       >
-//         点击
-//       </Button>
-//     </div>
-//   );
-// };
-// export default App;
+  return (
+    <div>
+      <div>{count}</div>
+      <Button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        点击
+      </Button>
+    </div>
+  );
+};
+export default App;
 
 
 // const someExpensiveComputation =  (props) => props;
