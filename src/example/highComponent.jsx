@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 function withSubscription(WrappedComponent) {
 
   return class extends Component {

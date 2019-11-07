@@ -80,9 +80,9 @@ import { Button } from 'antd';
 // }
 // export default ExampleWithManyStates;
 
-/**
-react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多个 useState 状态值之间相互独立
 
+
+/*
 ***** 第一次渲染 *****
   useState(18)           // 将 age 初始化为 18 
   useEffect('apple')     // 将 fruit 初始化为 apple
@@ -171,6 +171,14 @@ react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多
 // export default Form;
 
 
+
+/**
+
+问题： 在一个组件中多次调用 useState 和 useEffect，如何判断对应的状态呢？
+
+  React 靠的是 hook 调用的顺序， hook 的调用顺序在每次的渲染中都是相同， 能保证 hook 状态的准确性
+  如果在判断条件等中使用 hook ， 当条件不成立时， 该 hook 不执行， 后面的 hook 调用都被提前执行， 导致 bug 产生； 如果我们想有条件的执行一个 hook 可以将判断条件放在 hook 内部。
+*/
 // ------------
 // 首次渲染
 // ------------
@@ -238,30 +246,30 @@ react 根据 useState 出现的顺序决定 state 的状态值 , 从而保证多
 
 
 // ================ 自定义 hook ================
-function useWindowWidth () {
-  const [ width, setWidth ] = useState(window.innerWidth);
+// function useWindowWidth () {
+//   const [ width, setWidth ] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
+//   useEffect(() => {
+//     const handleResize = () => setWidth(window.innerWidth);
+//     window.addEventListener('resize', handleResize);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    }
-  });
+//     return () => {
+//       window.removeEventListener('resize', handleResize);
+//     }
+//   });
 
-  return width;
-}
+//   return width;
+// }
 
-function myComponent () {
-  const width = useWindowWidth();
+// function myComponent () {
+//   const width = useWindowWidth();
 
-  return (
-    <p>窗口宽度： {width}</p>
-  )
-}
+//   return (
+//     <p>窗口宽度： {width}</p>
+//   )
+// }
 
-export default myComponent;
+// export default myComponent;
 // ================ 自定义 hook ================
 
 
@@ -269,6 +277,10 @@ export default myComponent;
 
 
 
+
+
+
+// =========== useRef ===========
 
 // function Counter() {
 //   const [count, setCount] = useState(0);

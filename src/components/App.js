@@ -82,49 +82,52 @@ import { Button } from 'antd';
 
 
 
-const { Consumer, Provider } = React.createContext({
-  color: 'red',
-});
-
-class App extends Component {
-  constructor () {
-    super();
-    this.state = {
-      color: 'red'
-    }
-  }
-
-  handleClick = (newColor) => {
-    this.setState({ color: newColor })
-  }
-
-  render () {
-      return (
-        <Provider value={{ s: this.state, h: this.handleClick }}>
-          <Head></Head>
-        </Provider>
-      )
-  }
-}
+// ============ createContext =============
 
 
-class Head extends Component {
-  render () {
-    return (<Title></Title>)
-  }
-}
+// const { Consumer, Provider } = React.createContext({
+//   color: 'red',
+// });
 
-class Title extends Component {
+// class App extends Component {
+//   constructor () {
+//     super();
+//     this.state = {
+//       color: 'red'
+//     }
+//   }
 
-  render () {
-    return (
-      <Consumer>
-        { ({s, h}) => {
-            console.log(s, h)
-            return <div style={s} onClick={ () => h('pink') }>hello</div>
-          }
-        }
-      </Consumer>
-    )
-  }
-}
+//   handleClick = (newColor) => {
+//     this.setState({ color: newColor })
+//   }
+
+//   render () {
+//       return (
+//         <Provider value={{ s: this.state, h: this.handleClick }}>
+//           <Head></Head>
+//         </Provider>
+//       )
+//   }
+// }
+
+
+// class Head extends Component {
+//   render () {
+//     return (<Title></Title>)
+//   }
+// }
+
+// class Title extends Component {
+
+//   render () {
+//     return (
+//       <Consumer>
+//         { ({s, h}) => {
+//             console.log(s, h)
+//             return <div style={s} onClick={ () => h('pink') }>hello</div>
+//           }
+//         }
+//       </Consumer>
+//     )
+//   }
+// }

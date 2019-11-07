@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useContext, Component } from 'react';
 
-
 function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
 
